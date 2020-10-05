@@ -3,10 +3,17 @@ from decouple import config
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
-DEBUG = True
+# DEBUG = True
+# Production Settings
+DEBUG = config('DEBUG', cast=bool)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #SECRET_KEY = '-05sgp9!deq=q1nltm@^^2cc+v29i(tyybv3v2t77qi66czazj'
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+
+# ALLOWED_HOSTS = ['127.0.0.1','localhost']
+# Production Settings
+ALLOWED_HOSTS = ['ip-address', 'www.your-website.com']
+
 SECRET_KEY = config('SECRET_KEY')
 
 INSTALLED_APPS = [
@@ -72,12 +79,25 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, 'db.sqlite3')
+#     }
+# }
+
+# Production Settings
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, 'db.sqlite3')
-    }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': ''
+     }
 }
+
 
 if ENVIRONMENT == 'production':
     DEBUG = False
@@ -150,6 +170,14 @@ def show_toolbar(request):
 
 
 
+# AUTH_PASSWORD_VALIDATORS = [
+#     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'}
+# ]
+
+# Production Settings
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -170,5 +198,17 @@ EMAIL_HOST_USER = 'yander.helpdesk@gmail.com'
 EMAIL_HOST_PASSWORD = 'yander@ecom'
 EMAIL_USE_TLS =True
 
-####################################################################################################################
+#####################################################################################################################
 
+
+
+
+
+
+
+
+
+
+
+# STRIPE_PUBLIC_KEY = config('STRIPE_LIVE_PUBLIC_KEY')
+# STRIPE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY')
